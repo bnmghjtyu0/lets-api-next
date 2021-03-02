@@ -1,8 +1,11 @@
+import * as React from "react";
 import Head from "next/head";
+// import { signIn, signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 
 export default function Home({ apis }) {
+  let formRef = React.useRef();
   const router = useRouter();
 
   async function handleDeleteButtonClick(id) {
@@ -14,10 +17,29 @@ export default function Home({ apis }) {
         const body = await res.json();
         throw new Error(body.data.error.message);
       }
-      console.log('使用者刪除成功')
+      console.log("使用者刪除成功");
       router.replace("/");
     } catch (error) {
       console.log("delete error", error);
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const { email, password } = formRef.current.elements;
+    const rawResponse = await fetch("/api/signin", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email.value, password: password.value }),
+    })
+      .then((res) => res.json())
+      .then((json) => json);
+
+    if (rawResponse.success) {
+      console.log(rawResponse.token);
     }
   }
   return (
@@ -56,6 +78,20 @@ export default function Home({ apis }) {
           );
         })}
       </ul>
+
+      <h4>登入</h4>
+      <form onSubmit={handleSubmit} ref={formRef}>
+        <div className="flex">
+          <label>email</label>
+          <input name="email" />
+        </div>
+        <div>
+          <label>password</label>
+          <input name="password" />
+        </div>
+
+        <input type="submit" />
+      </form>
     </div>
   );
 }
