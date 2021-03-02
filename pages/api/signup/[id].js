@@ -6,10 +6,14 @@ export async function deleteUser(id) {
   });
   if (result.affectedRows > 0) {
     console.log("刪除成功");
+    return { retCode: 1 };
   }
 }
 export default async (req, res) => {
   if (req.method === "DELETE") {
-    await deleteUser(req.query.id);
+    const response = await deleteUser(req.query.id);
+    if (response.retCode === 1) {
+      return res.status(204).end();
+    }
   }
 };
