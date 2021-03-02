@@ -1,5 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import excuteQuery from "./db";
 
-export default (req, res) => {
-  res.status(200).json({ name: 'John Doe' })
-}
+export default async (req, res) => {
+  const result = await excuteQuery({
+    query: "select * from users",
+  });
+  res.status(200).json({ users: result });
+};

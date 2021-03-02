@@ -1,68 +1,61 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 
 export default function Home({ apis }) {
+  const router = useRouter();
+
+  async function handleDeleteButtonClick(id) {
+    try {
+      const res = await fetch(`/api/signup/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.data.error.message);
+      }
+      console.log('使用者刪除成功')
+      router.replace("/");
+    } catch (error) {
+      console.log("delete error", error);
+    }
+  }
   return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <h2>[GET] `/api/hello`</h2>
-        <p>{apis.retMsg.name}</p>
-
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      <h4>註冊</h4>
+      <form method="POST" action="/api/signup">
+        <div className="flex">
+          <label>email</label>
+          <input name="email" />
         </div>
-      </main>
+        <div>
+          <label>password</label>
+          <input name="password" />
+        </div>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+        <input type="submit" />
+      </form>
+
+      <h4>使用者列表</h4>
+      <ul>
+        {apis.retMsg.users.map((user, userIdx) => {
+          return (
+            <li>
+              {user.email}
+              <button
+                onClick={() => handleDeleteButtonClick(user.id)}
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline block flex-grow mt-2 md:inline md:flex-grow-0 md:m-0 md:ml-1"
+              >
+                Delete
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -80,7 +73,7 @@ export async function getStaticProps() {
       apis: {
         retCode: 1,
         retMsg: {
-          name: posts.name,
+          users: posts.users,
         },
       },
     },
