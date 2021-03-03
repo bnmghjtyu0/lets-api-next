@@ -11,6 +11,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DehazeIcon from "@material-ui/icons/Dehaze";
+import Link from "next/link";
+
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -19,6 +21,32 @@ const useStyles = makeStyles({
     width: "auto",
   },
 });
+
+function ListItemLink(props) {
+  const { icon, primary, to } = props;
+  console.log(to);
+
+  const CustomLink = React.useMemo(
+    () =>
+      React.forwardRef((linkProps, ref) => (
+        <li>
+          <Link ref={ref} href={to} {...linkProps}>
+            <a>{primary}</a>
+          </Link>
+        </li>
+      )),
+    [to]
+  );
+
+  return (
+    <ListItem button component={CustomLink}>
+      <ListItemIcon>
+        <DehazeIcon />
+      </ListItemIcon>
+      <ListItemText primary={primary} />
+    </ListItem>
+  );
+}
 
 export default function SwipeableTemporaryDrawer() {
   const classes = useStyles();
@@ -51,16 +79,13 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["首頁"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {[
+          { name: "首頁", link: "/" },
+          { name: "使用者列表", link: "/users" },
+        ].map((text, index) => (
+          <ListItemLink to={text.link} primary={text.name} />
         ))}
       </List>
-   
     </div>
   );
 
@@ -69,7 +94,7 @@ export default function SwipeableTemporaryDrawer() {
       {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>
-            <DehazeIcon style={{ color: "#FFF" }}/>
+            <DehazeIcon style={{ color: "#FFF" }} />
           </Button>
           <SwipeableDrawer
             anchor={anchor}

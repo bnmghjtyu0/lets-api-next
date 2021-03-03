@@ -5,5 +5,5 @@ module.exports = {
     MYSQL_DATABASE: "richard",
     MYSQL_USER: "richard",
     MYSQL_PASSWORD: "root",
-  },
+  }
 };

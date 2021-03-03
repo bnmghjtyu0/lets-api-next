@@ -21,7 +21,11 @@ export async function createUser({ email, password }, req, res) {
     });
 
     if (result.affectedRows === 1) {
-      res.redirect("/");
+      // res.redirect("/");
+      res.status(200).json({
+        retCode: 1,
+        retMsg: "註冊成功",
+      });
     }
   });
 
