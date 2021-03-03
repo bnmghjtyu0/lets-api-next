@@ -21,7 +21,7 @@ export default function Home({ apiHome }) {
 export async function getStaticProps(ctx) {
   try {
     //串接 api
-    const result = await fetch("http://localhost:3001/api").then((res) =>
+    const result = await fetch("http://localhost:3000/api").then((res) =>
       res.json()
     );
     // api 回傳成功
