@@ -6,6 +6,7 @@ const LoginPage = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const { username, password } = formRef.current.elements;
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
@@ -15,7 +16,9 @@ const LoginPage = () => {
       body: JSON.stringify({
         username: username.value,
         password: password.value,
+        token: "ABCD",
       }),
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((json) => json);

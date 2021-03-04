@@ -12,44 +12,18 @@ export default function Home({ token }) {
       </Head>
 
       <h2>token: {token}</h2>
-      <button
-        type="button"
-        onClick={() => {
-          // cookie.set("token", "ABCD", { expires: 1 / 24 });
-          fetch("/api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: "ABCD" }),
-            credentials: "include",
-          });
-        }}
-      >
-        Login
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          // cookie.remove("token");
-          fetch("/api/logout", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-            credentials: "include",
-          });
-        }}
-      >
-        Logout
-      </button>
     </div>
   );
 }
 
 export function getServerSideProps({ req, res }) {
-  return { props: { token: req.cookies?.token ?? '' } };
+  let token = req.cookies?.token ?? "";
+  if (!token) {
+    res.statusCode = 302;
+    res.setHeader("Location", `/signin`);
+    return { props: {} };
+  }
+  return { props: { token } };
 }
 
 // export async function getStaticProps(ctx) {
