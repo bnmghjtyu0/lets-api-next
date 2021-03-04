@@ -1,4 +1,5 @@
 import React from "react";
+import {useRouter} from 'next/router'
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -49,6 +50,7 @@ function ListItemLink(props) {
 }
 
 export default function SwipeableTemporaryDrawer() {
+  const router = useRouter();
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -69,6 +71,15 @@ export default function SwipeableTemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
+  const handleLogout = async () => {
+    await fetch("/api/logout", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+
+    router.replace("/login");
+  };
+
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -81,7 +92,7 @@ export default function SwipeableTemporaryDrawer() {
       <List>
         {[
           { name: "首頁", link: "/" },
-          { name: "使用者列表", link: "/users" },
+          { name: "使用者列表", link: "/userlist" },
         ].map((text, index) => (
           <ListItemLink to={text.link} primary={text.name} />
         ))}
@@ -104,6 +115,8 @@ export default function SwipeableTemporaryDrawer() {
           >
             {list(anchor)}
           </SwipeableDrawer>
+
+          <Button onClick={handleLogout}>登出</Button>
         </React.Fragment>
       ))}
     </div>

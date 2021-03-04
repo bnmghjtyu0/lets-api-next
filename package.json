@@ -24,6 +24,8 @@
     "sequelize": "^6.5.0",
     "sequelize-cli": "^6.2.0",
     "serverless-mysql": "^1.5.4",
+    "styled-components": "^5.2.1",
+    "swr": "^0.4.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

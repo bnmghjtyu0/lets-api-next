@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useRouter } from "next/router";
+import { Container } from "./styled/main";
+
 const LoginPage = () => {
   let router = useRouter();
   let formRef = React.useRef();
@@ -28,7 +30,7 @@ const LoginPage = () => {
     }
   }
   return (
-    <div>
+    <Container>
       <h4>登入</h4>
       <form onSubmit={handleSubmit} ref={formRef}>
         <div className="flex">
@@ -42,7 +44,7 @@ const LoginPage = () => {
 
         <input type="submit" />
       </form>
-    </div>
+    </Container>
   );
 };
 
