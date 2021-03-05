@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import Header from "../components/header";
 import { getUserInfo } from "../services/api";
 import { withSession } from "next-session";
-import { UserProvider } from "@context/user";
+import UserProvider from "@context/user";
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     (async () => {
@@ -16,10 +16,28 @@ function MyApp({ Component, pageProps }) {
     })();
   }, []);
 
+  async function getUser() {
+    // TODO add SWR
+    let res = await getUserInfo();
+    if (res.retCode === 1) {
+      const userWithAvatarFallback = {
+        ...res,
+        avatar_url:
+          res.avatar_url ??
+          "https://res.cloudinary.com/netlify/image/upload/q_auto,f_auto,w_210/v1605632851/explorers/avatar.jpg",
+      };
+
+      setUser(res.retVal);
+      // cache[token] = userWithAvatarFallback;
+    }
+  }
+
   return (
     <div>
-      <Header />
-      <Component {...pageProps} />
+      <UserProvider>
+        <Header />
+        <Component {...pageProps} />
+      </UserProvider>
     </div>
   );
 }

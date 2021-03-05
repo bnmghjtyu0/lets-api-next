@@ -1,5 +1,5 @@
 import React from "react";
-import {useRouter} from 'next/router'
+import { useRouter } from "next/router";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -13,7 +13,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 import Link from "next/link";
-
+import { UserContext } from "@context/user";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -52,6 +52,8 @@ function ListItemLink(props) {
 export default function SwipeableTemporaryDrawer() {
   const router = useRouter();
   const classes = useStyles();
+  const context = React.useContext(UserContext);
+
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -115,7 +117,7 @@ export default function SwipeableTemporaryDrawer() {
           >
             {list(anchor)}
           </SwipeableDrawer>
-
+          {context.state.user.username}
           <Button onClick={handleLogout}>登出</Button>
         </React.Fragment>
       ))}

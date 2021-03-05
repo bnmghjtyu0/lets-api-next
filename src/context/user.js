@@ -1,15 +1,14 @@
-import * as React from "react";
+import React, { createContext, useState } from "react";
 import { getUserInfo } from "../services/api";
-
-const UserStateContext = React.createContext();
+export const UserContext = createContext();
 const cache = {};
 
-async function UserProvider() {
-  const [user, setUser] = React.useState();
-  const [token, setToken] = React.useState();
+const UserContextProvider = (props) => {
+  const [user, setUser] = useState({});
+  const [token, setToken] = useState();
+
   React.useEffect(() => {
     const storedToken = window.localStorage.getItem("token");
-
     setToken(storedToken);
   }, []);
 
@@ -17,14 +16,6 @@ async function UserProvider() {
     if (!token) {
       return;
     }
-
-    // use cached user data if we’ve already hit the API with this token
-    if (cache[token]) {
-      setUser(cache[token]);
-      setStatus("loaded");
-      return;
-    }
-
     getUser();
   }, [token]);
 
@@ -38,23 +29,19 @@ async function UserProvider() {
           res.avatar_url ??
           "https://res.cloudinary.com/netlify/image/upload/q_auto,f_auto,w_210/v1605632851/explorers/avatar.jpg",
       };
-
-      setUser(userWithAvatarFallback);
-      cache[token] = userWithAvatarFallback;
+      setUser(res.retVal);
+      // cache[token] = userWithAvatarFallback;
     }
   }
 
-  const state = {
-    user,
-    token,
+  const defaultValue = {
+    state: { user },
     getUser,
   };
-
   return (
-    <UserStateContext.Provider value={state}>
-      {children}
-    </UserStateContext.Provider>
+    <UserContext.Provider value={defaultValue}>
+      {props.children}
+    </UserContext.Provider>
   );
-}
-
-export { UserProvider };
+};
+export default UserContextProvider;
