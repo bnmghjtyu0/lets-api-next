@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import Header from "../components/header";
 import { getUserInfo } from "../services/api";
 import { withSession } from "next-session";
-import { UserProvider } from "../context/user";
+import { UserProvider } from "@context/user";
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     (async () => {
