@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import { Container } from "./styled/main";
+import { Container } from "../styled/main";
 
 const LoginPage = () => {
   let router = useRouter();
@@ -18,7 +18,6 @@ const LoginPage = () => {
       body: JSON.stringify({
         username: username.value,
         password: password.value,
-        token: "ABCD",
       }),
       credentials: "include",
     })
@@ -26,6 +25,8 @@ const LoginPage = () => {
       .then((json) => json);
     if (res.retCode === 1) {
       console.log("登入成功");
+      console.log(res);
+      localStorage.setItem("token", res.retVal.token);
       router.replace("/");
     }
   }

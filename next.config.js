@@ -1,4 +1,5 @@
 module.exports = {
+  public:'src/pages',
   env: {
     MYSQL_HOST: "localhost",
     MYSQL_PORT: "3306",
