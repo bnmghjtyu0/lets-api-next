@@ -25,7 +25,6 @@ const useStyles = makeStyles({
 
 function ListItemLink(props) {
   const { icon, primary, to } = props;
-  console.log(to);
 
   const CustomLink = React.useMemo(
     () =>
@@ -54,6 +53,10 @@ export default function SwipeableTemporaryDrawer() {
   const classes = useStyles();
   const context = React.useContext(UserContext);
 
+  React.useEffect(() => {
+    context.getUser();
+  }, []);
+
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -74,12 +77,13 @@ export default function SwipeableTemporaryDrawer() {
   };
 
   const handleLogout = async () => {
+    localStorage.clear();
+    context.setIsLogin(false);
+    router.replace("/login");
     await fetch("/api/logout", {
       method: "POST",
       body: JSON.stringify({}),
     });
-
-    router.replace("/login");
   };
 
   const list = (anchor) => (
@@ -117,8 +121,12 @@ export default function SwipeableTemporaryDrawer() {
           >
             {list(anchor)}
           </SwipeableDrawer>
-          {context.state.user.username}
-          <Button onClick={handleLogout}>登出</Button>
+          {context.state.isLogin && (
+            <React.Fragment>
+              {context.state.user.username}
+              <Button onClick={handleLogout}>登出</Button>
+            </React.Fragment>
+          )}
         </React.Fragment>
       ))}
     </div>

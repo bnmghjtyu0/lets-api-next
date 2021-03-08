@@ -1,10 +1,19 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 import { Container } from "../styled/main";
+import { UserContext } from "../context/user";
 
 const LoginPage = () => {
   let router = useRouter();
   let formRef = React.useRef();
+  let context = React.useContext(UserContext);
+
+  React.useEffect(() => {
+    if (context.state.isLogin) {
+      router.replace("/");
+    }
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
     const { username, password } = formRef.current.elements;
@@ -24,8 +33,7 @@ const LoginPage = () => {
       .then((res) => res.json())
       .then((json) => json);
     if (res.retCode === 1) {
-      console.log("登入成功");
-      console.log(res);
+      context.setIsLogin(true);
       localStorage.setItem("token", res.retVal.token);
       router.replace("/");
     }

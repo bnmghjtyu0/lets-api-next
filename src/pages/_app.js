@@ -1,4 +1,5 @@
 import React from "react";
+import Head from 'next/head'
 import "../assets/css/material-dashboard-react.css";
 import "../styles/globals.css";
 // core components
@@ -12,33 +13,12 @@ if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
 }
 
 function MyApp({ Component, pageProps }) {
-  React.useEffect(() => {
-    (async () => {
-      let res = await getUserInfo();
-      if (res.retCode === 1) {
-        console.log(res);
-      }
-    })();
-  }, []);
-
-  async function getUser() {
-    // TODO add SWR
-    let res = await getUserInfo();
-    if (res.retCode === 1) {
-      const userWithAvatarFallback = {
-        ...res,
-        avatar_url:
-          res.avatar_url ??
-          "https://res.cloudinary.com/netlify/image/upload/q_auto,f_auto,w_210/v1605632851/explorers/avatar.jpg",
-      };
-
-      setUser(res.retVal);
-      // cache[token] = userWithAvatarFallback;
-    }
-  }
-
   return (
     <div>
+      <Head>
+        <title>combocombo</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <UserProvider>
         <Header />
         <Component {...pageProps} />
