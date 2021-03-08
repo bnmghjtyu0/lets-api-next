@@ -24,23 +24,3 @@ export function getServerSideProps({ req, res }) {
 
   return { props: { token } };
 }
-
-// export async function getStaticProps(ctx) {
-//   try {
-//     //串接 api
-//     const result = await fetch("http://localhost:3000/api").then((res) =>
-//       res.json()
-//     );
-//     // api 回傳成功
-//     return {
-//       props: {
-//         apiHome: result,
-//       },
-//     };
-//   } catch (error) {
-//     // 伺服器有問題
-//     error.ctx = ctx;
-//     // logErrorToExternalLoggingService(error, "Fetching static props failed");
-//     throw error;
-//   }
-// }

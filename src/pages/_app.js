@@ -6,6 +6,11 @@ import Header from "../components/header";
 import { getUserInfo } from "../services/api";
 import { withSession } from "next-session";
 import UserProvider from "@context/user";
+
+if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
+  require("../mocks");
+}
+
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     (async () => {
