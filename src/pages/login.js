@@ -8,11 +8,6 @@ const LoginPage = () => {
   let formRef = React.useRef();
   let context = React.useContext(UserContext);
 
-  React.useEffect(() => {
-    if (context.state.isLogin) {
-      router.replace("/");
-    }
-  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
